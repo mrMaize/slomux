@@ -133,6 +133,8 @@ class TimerComponent extends React.Component {
     currentTime: 0
   };
 
+  interval = null;
+
   render() {
     return (
       <div>
@@ -146,24 +148,23 @@ class TimerComponent extends React.Component {
     );
   }
 
-  handleStart() {
-    setTimeout(
-      () =>
-        this.setState({
-          currentTime: this.state.currentTime + this.props.currentInterval
-        }),
-      this.props.currentInterval
-    );
-  }
+  handleStart = () => {
+    this.interval = setInterval(() => {
+      this.setState({
+        currentTime: this.state.currentTime + this.props.currentInterval
+      });
+    }, this.props.currentInterval * 1000);
+  };
 
-  handleStop() {
+  handleStop = () => {
+    clearInterval(this.interval);
     this.setState({ currentTime: 0 });
-  }
+  };
 }
 
 const Timer = connect(
   state => ({
-    currentInterval: state
+    currentInterval: state.currentInterval
   }),
   () => {}
 )(TimerComponent);
